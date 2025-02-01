@@ -1,13 +1,10 @@
 {
   "type": "object",
-  "$id": "schema:todo:update:body",
+  "$id": "schema:user",
   "additionalProperties": false,
   "properties": {
-    "title": {
+    "username": {
       "type": "string"
-    },
-    "done": {
-      "type": "boolean"
     }
   }
 }
