@@ -31,4 +31,4 @@ USER node
 
 EXPOSE 3000
 ENTRYPOINT ["dumb-init"]
-CMD ["npm", "start"]
+CMD ["./node_modules/.bin/fastify", "start", "-l", "info", "-a", "0.0.0.0", "--options", "app.js"]
