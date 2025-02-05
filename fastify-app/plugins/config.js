@@ -9,6 +9,7 @@ module.exports = fp(
       confKey: 'secrets',
       schema: fastify.getSchema('schema:dotenv')
     })
+    fastify.log.level = fastify.secrets.LOG_LEVEL
   },
   { name: 'application-config' }
 )

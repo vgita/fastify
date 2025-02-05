@@ -17,6 +17,18 @@
         "JWT_SECRET": {
             "type": "string",
             "default": "superS3cr3t"
+        },
+        "LOG_LEVEL": {
+            "type": "string",
+            "default": "warn"
+        },
+        "REQUEST_ID_LOG_LABEL": {
+            "type": "string",
+            "default": "reqId"
+        },
+        "REQUEST_ID_HEADER": {
+            "type": "string",
+            "default": "x-request-id"
         }
     }
 }

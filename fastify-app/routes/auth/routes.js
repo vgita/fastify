@@ -21,9 +21,7 @@ module.exports = fp(
           throw err
         }
 
-        const { hash, salt } = await generateHash(
-          request.body.password
-        )
+        const { hash, salt } = await generateHash(request.body.password)
 
         try {
           const newUserId = await this.usersDataSource.createUser({
@@ -50,10 +48,9 @@ module.exports = fp(
           200: fastify.getSchema('schema:auth:token')
         }
       },
+      config: { logBody: true },
       handler: async function authenticateHandler (request, reply) {
-        const user = await this.usersDataSource.readUser(
-          request.body.username
-        )
+        const user = await this.usersDataSource.readUser(request.body.username)
 
         if (!user) {
           // if we return 404, an attacker can use this to find out which users are registered
@@ -62,10 +59,7 @@ module.exports = fp(
           throw err
         }
 
-        const { hash } = await generateHash(
-          request.body.password,
-          user.salt
-        )
+        const { hash } = await generateHash(request.body.password, user.salt)
         if (hash !== user.hash) {
           const err = new Error('Wrong credentials provided')
           err.statusCode = 401

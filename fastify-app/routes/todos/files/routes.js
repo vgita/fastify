@@ -10,12 +10,14 @@ module.exports = async function fileTodoRoutes (fastify, _opts) {
     async onFile (part) {
       const lines = []
 
-      const stream = part.file.pipe(csvParse({
-        bom: true,
-        skip_empty_lines: true,
-        trim: true,
-        columns: true
-      }))
+      const stream = part.file.pipe(
+        csvParse({
+          bom: true,
+          skip_empty_lines: true,
+          trim: true,
+          columns: true
+        })
+      )
 
       for await (const line of stream) {
         lines.push({
@@ -44,7 +46,8 @@ module.exports = async function fileTodoRoutes (fastify, _opts) {
       body: {
         type: 'object',
         required: ['todoListFile'],
-        description: 'Import a todo list from a CSV file with the following format: title,done',
+        description:
+          'Import a todo list from a CSV file with the following format: title,done',
         properties: {
           todoListFile: {
             type: 'array',
@@ -67,7 +70,9 @@ module.exports = async function fileTodoRoutes (fastify, _opts) {
       }
     },
     handler: async function listTodo (request, reply) {
-      const inserted = await request.todosDataSource.createTodos(request.body.todoListFile)
+      const inserted = await request.todosDataSource.createTodos(
+        request.body.todoListFile
+      )
       reply.code(201)
       return inserted
     }
@@ -90,18 +95,23 @@ module.exports = async function fileTodoRoutes (fastify, _opts) {
         asStream: true
       })
 
-      reply.header('Content-Disposition', 'attachment; filename="todo-list.csv"')
+      reply.header(
+        'Content-Disposition',
+        'attachment; filename="todo-list.csv"'
+      )
       reply.type('text/csv')
 
-      return cursor.pipe(csvStringify({
-        quoted_string: true,
-        header: true,
-        columns: ['title', 'done', 'createdAt', 'modifiedAt', 'id'],
-        cast: {
-          boolean: (value) => value ? 'true' : 'false',
-          date: (value) => value.toISOString()
-        }
-      }))
+      return cursor.pipe(
+        csvStringify({
+          quoted_string: true,
+          header: true,
+          columns: ['title', 'done', 'createdAt', 'modifiedAt', 'id'],
+          cast: {
+            boolean: (value) => (value ? 'true' : 'false'),
+            date: (value) => value.toISOString()
+          }
+        })
+      )
     }
   })
 }
